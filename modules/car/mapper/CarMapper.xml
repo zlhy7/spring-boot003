@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.renyong.springboot003.modules.car.dao.CarDao">
+    <resultMap id="BaseResultMap" type="com.renyong.springboot003.modules.car.model.Car">
+        <id column="car_id" property="id" />
+        <result column="car_cd" property="carCd"/>
+        <result column="car_brand" property="carBrand"/>
+        <result column="car_model" property="carModel"/>
+        <result column="car_number" property="carNumber"/>
+        <result column="car_color" property="carColor"/>
+        <!--公共属性-->
+        <!--<result column="create_user" property="createUser.id" jdbcType="VARCHAR" />-->
+        <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+        <result column="last_update_date" property="lastUpdateDate" jdbcType="TIMESTAMP" />
+        <!--<result column="last_update_user" property="lastUpdateUser.id" jdbcType="VARCHAR" />-->
+        <result column="del_flag" property="delFlag" jdbcType="VARCHAR" />
+        <result column="remarks" property="remarks" jdbcType="VARCHAR" />
+    </resultMap>
+    <!--查询单个-->
+    <select id="get" resultMap="BaseResultMap">
+        SELECT * from CAR WHERE CAR_ID = #{id}
+    </select>
+    <!--查询多个-->
+    <select id="findAll" resultMap="BaseResultMap">
+        SELECT * from CAR WHERE del_flag = '0'
+        <if test="id !=null and id!=''">
+            AND car_id = #{id}
+        </if>
+        <if test="carCd !=null and carCd!=''">
+            AND car_cd = #{carCd}
+        </if>
+        <if test="carBrand !=null and carBrand!=''">
+            AND car_brand = #{carBrand}
+        </if>
+        <if test="carModel !=null and carModel!=''">
+            AND car_model = #{carModel}
+        </if>
+        <if test="carNumber !=null and carNumber!=''">
+            AND car_number = #{carNumber}
+        </if>
+        <if test="carColor !=null and carColor!=''">
+            AND car_color = #{carColor}
+        </if>
+        ORDER BY CREATE_DATE DESC 
+    </select>
+    <!--新增-->
+    <insert id="insert">
+        INSERT INTO CAR
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id !=null and id!=''">
+                car_id,
+            </if>
+            <if test="carCd !=null and carCd!=''">
+                car_cd,
+            </if>
+            <if test="carBrand !=null and carBrand!=''">
+                car_brand,
+            </if>
+            <if test="carModel !=null and carModel!=''">
+                car_model,
+            </if>
+            <if test="carNumber !=null and carNumber!=''">
+                car_number,
+            </if>
+            <if test="carColor !=null and carColor!=''">
+                car_color,
+            </if>
+
+            <if test="createUser != null" >
+                CREATE_USER,
+            </if>
+            <if test="createDate != null" >
+                CREATE_DATE,
+            </if>
+            <if test="lastUpdateDate != null" >
+                LAST_UPDATE_DATE,
+            </if>
+            <if test="lastUpdateUser != null" >
+                LAST_UPDATE_USER,
+            </if>
+            <if test="delFlag != null" >
+                DEL_FLAG,
+            </if>
+            <if test="remarks != null" >
+                REMARKS
+            </if>
+        </trim>
+        <trim prefix="values(" suffix=")" suffixOverrides=",">
+            <if test="id !=null and id!=''">
+                #{id},
+            </if>
+            <if test="carCd !=null and carCd!=''">
+                #{carCd},
+            </if>
+            <if test="carBrand !=null and carBrand!=''">
+                #{carBrand},
+            </if>
+            <if test="carModel !=null and carModel!=''">
+                #{carModel},
+            </if>
+            <if test="carNumber !=null and carNumber!=''">
+                #{carNumber},
+            </if>
+            <if test="carColor !=null and carColor!=''">
+                #{carColor},
+            </if>
+            <if test="createUser != null" >
+                #{createUser.id},
+            </if>
+            <if test="createDate != null" >
+                #{createDate},
+            </if>
+            <if test="lastUpdateDate != null" >
+                #{lastUpdateDate},
+            </if>
+            <if test="lastUpdateUser != null" >
+                #{lastUpdateUser.id},
+            </if>
+            <if test="delFlag != null" >
+                #{delFlag},
+            </if>
+            <if test="remarks != null" >
+                #{remarks}
+            </if>
+        </trim>
+    </insert>
+    <!--修改-->
+    <update id="update">
+        update CAR
+        <trim prefix="set" suffixOverrides=",">
+            <if test="id !=null and id!=''">
+                car_id = #{id},
+            </if>
+            <if test="carCd !=null and carCd!=''">
+                car_cd = #{carCd},
+            </if>
+            <if test="carBrand !=null and carBrand!=''">
+                car_brand = #{carBrand},
+            </if>
+            <if test="carModel !=null and carModel!=''">
+                car_model = #{carModel},
+            </if>
+            <if test="carNumber !=null and carNumber!=''">
+                car_number = #{carNumber},
+            </if>
+            <if test="carColor !=null and carColor!=''">
+                car_color = #{carColor},
+            </if>
+
+            <if test="createUser != null" >
+                CREATE_USER=#{createUser.id},
+            </if>
+            <if test="createDate != null" >
+                CREATE_DATE=#{createDate},
+            </if>
+            <if test="lastUpdateDate != null" >
+                LAST_UPDATE_DATE=#{lastUpdateDate},
+            </if>
+            <if test="lastUpdateUser != null" >
+                LAST_UPDATE_USER=#{lastUpdateUser.id},
+            </if>
+            <if test="delFlag != null" >
+                DEL_FLAG=#{delFlag},
+            </if>
+            <if test="remarks != null" >
+                REMARKS=#{remarks}
+            </if>
+        </trim>
+        where CAR_ID=#{id}
+    </update>
+    <!--逻辑删除-->
+    <update id="delete">
+        update CAR
+        SET del_flag = '1',
+        LAST_UPDATE_DATE=#{lastUpdateDate},
+        LAST_UPDATE_USER=#{lastUpdateUser.id}
+        where CAR_ID=#{id}
+    </update>
+    <!--物理删除-->
+    <delete id="deleteById">
+        DELETE FROM CAR WHERE CAR_ID = #{id}
+    </delete>
+</mapper>
